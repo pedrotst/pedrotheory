@@ -4,7 +4,7 @@ type exp =
 | Typ
 | Var of ident
 | Fun of ident * exp * exp
-| Prod of string * exp * exp
+| Prod of ident * exp * exp
 | App of exp * exp
 | Ascr of exp * exp
 

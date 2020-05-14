@@ -2,13 +2,15 @@
 
 type token =
 | ID of string
+| VAR
 | FUN
 | PROD
-| COLON
 | TYPE
+| ARROW
+| COLON
+| COMMA
 | OPEN_PAREN
 | CLOSE_PAREN
-| ARROW
 | EOF
 
 }
@@ -20,9 +22,10 @@ rule lex = parse
 | "forall" { PROD }
 | "fun"    { FUN }
 | "=>"     { ARROW }
+| ":"      { COLON }
+| ","      { COMMA }
 | "("      { OPEN_PAREN }
 | ")"      { CLOSE_PAREN }
-| ":"      { COLON }
 | "Type"   { TYPE }
 | [ 'a'-'z' 'A'-'X' '_']['0'-'9' 'A'-'Z' 'a'-'z' '_']* as s
            { ID (s) }
