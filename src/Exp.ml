@@ -8,10 +8,21 @@ type exp =
 | App of exp * exp
 | Ascr of exp * exp
 
-let rec str = function
+type statement =
+| Context
+| Parameter of ident * exp
+| Definition of ident * exp
+| Check of exp
+| Eval of exp
+
+type context = (ident * exp) list
+
+type program = statement list
+
+let rec pp_exp = function
 | Typ -> "Type"
 | Var s -> s
-| Fun (x, t, e) -> "fun " ^ x ^ " : " ^ (str t) ^ " => " ^ (str e)
-| Prod (x, t, e) -> "forall " ^ x ^ ":" ^ (str t) ^ ", " ^ (str e)
-| App (e1, e2) -> "(" ^ (str e1) ^ ") " ^ (str e2)
-| Ascr (e, t) -> (str e) ^ " : " ^ (str t)
+| Fun (x, t, e) -> "fun " ^ x ^ " : " ^ (pp_exp t) ^ " => " ^ (pp_exp e)
+| Prod (x, t, e) -> "forall " ^ x ^ ":" ^ (pp_exp t) ^ ", " ^ (pp_exp e)
+| App (e1, e2) -> "(" ^ (pp_exp e1) ^ ") " ^ (pp_exp e2)
+| Ascr (e, t) -> (pp_exp e) ^ " : " ^ (pp_exp t)
