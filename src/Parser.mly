@@ -5,13 +5,14 @@
 
 %{
     open Lexer
-    open Exp
+    open Term
+    open Vernacular
 %}
 
 %start parse_program
-/* %type <Exp.exp> parse_exp */
-%type <Exp.statement> parse_statement
-%type <Exp.program> parse_program rev_parse_program
+/* %type <Term.exp> parse_exp */
+%type <Vernacular.statement> parse_statement
+%type <Vernacular.program> parse_program rev_parse_program
 
 %%
 

@@ -8,17 +8,6 @@ type exp =
 | App of exp * exp
 | Ascr of exp * exp
 
-type statement =
-| Context
-| Parameter of ident * exp
-| Definition of ident * exp
-| Check of exp
-| Eval of exp
-
-type context = (ident * exp) list
-
-type program = statement list
-
 let rec pp_exp = function
 | Typ -> "Type"
 | Var s -> s
