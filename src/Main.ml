@@ -9,7 +9,7 @@ let main =
   s := read_line ();
   while not (!s = "Quit.") do
     eval (program_of_string !s);
-    printf "@?" ;
+    printf "@?" ; (* Flush printf special buffer *)
     flush_all ();
     s := read_line ()
   done

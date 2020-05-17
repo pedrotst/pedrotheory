@@ -7,7 +7,7 @@
     open Lexer
     open Term
     open Vernacular
-%}
+         %}
 
 %start parse_program
 /* %type <Term.exp> parse_exp */
@@ -16,16 +16,19 @@
 
 %%
 
-%public parse_id:
-  | ID { $1 }
+(* I'll leave this expression out for now, so I can extend it later *)
+parse_args:
+/* | OPEN_PAREN x=ID CLOSE_PAREN { x } */
+  | OPEN_PAREN x=ID COLON t=parse_term CLOSE_PAREN { (String x, t) }
+/* | ID { $1 } */
 
 parse_term:
-  | FUN OPEN_PAREN x = parse_id COLON t = parse_app CLOSE_PAREN ARROW e = parse_app
-    { Fun (x, t, e) }
-  | PROD OPEN_PAREN x = parse_id COLON t = parse_app CLOSE_PAREN COMMA e = parse_app
-    { Prod (x, t, e) }
-  | e = parse_app COLON t = parse_app
-    { Ascr (e, t) }
+  | FUN xt= parse_args ARROW e = parse_app
+    { let (x, t) = xt in Lambda (x, t, e) }
+  | PROD xt= parse_args COMMA e = parse_app
+    { let (x, t) = xt in Pi (x, t, e) }
+/* | e = parse_app COLON t = parse_app */
+/* { Ascr (e, t) } */
   | parse_app { $1 }
 
 parse_app:
@@ -34,14 +37,14 @@ parse_app:
     { App (e1, e2) }
 
 parse_simple_term:
-  | OPEN_PAREN e = parse_simple_term CLOSE_PAREN { e }
-  | TYPE { Typ }
-  | ID { Var $1 }
+  | OPEN_PAREN e = parse_term CLOSE_PAREN { e }
+  | TYPE { Universe 0 }
+  | ID { Var (String $1) }
 
 %public parse_statement:
   | CTX { Context }
-  | PARAM x=parse_id COLON t=parse_term { Parameter (x, t) }
-  | DEF x=parse_id ASGN t=parse_term  { Definition (x, t) }
+  | PARAM x=ID COLON t=parse_term { Parameter (x, t) }
+  | DEF x=ID ASGN t=parse_term  { Definition (x, t) }
   | CHECK t=parse_term { Check t }
   | EVAL t=parse_term  { Eval t }
 

@@ -1,6 +1,0 @@
-type ty =
-| basety
-| varty of string
-
-type exp =
-| Fun of
